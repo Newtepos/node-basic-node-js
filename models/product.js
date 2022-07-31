@@ -7,12 +7,12 @@ const p = path.join(
   "products.json"
 );
 
-const getProductFromFile = (callback) => {
+const getProductsFromFile = (cb) => {
   fs.readFile(p, (err, fileContent) => {
     if (err) {
-      callback([]);
+      cb([]);
     } else {
-      callback(JSON.parse(fileContent));
+      cb(JSON.parse(fileContent));
     }
   });
 };
@@ -26,7 +26,8 @@ module.exports = class Product {
   }
 
   save() {
-    getProductFromFile((products) => {
+    this.id = Math.random().toString();
+    getProductsFromFile((products) => {
       products.push(this);
       fs.writeFile(p, JSON.stringify(products), (err) => {
         console.log(err);
@@ -34,7 +35,14 @@ module.exports = class Product {
     });
   }
 
-  static fetchAll(callback) {
-    getProductFromFile(callback);
+  static fetchAll(cb) {
+    getProductsFromFile(cb);
+  }
+
+  static findProductbyId(id, cb) {
+    getProductsFromFile((products) => {
+      const product = products.find((p) => p.id == id);
+      cb(product)
+    });
   }
 };
