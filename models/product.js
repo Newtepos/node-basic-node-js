@@ -1,6 +1,7 @@
 const e = require("express");
 const fs = require("fs");
 const path = require("path");
+const Cart = require("../models/cart.js");
 
 const p = path.join(
   path.dirname(process.mainModule.filename),
@@ -59,10 +60,14 @@ module.exports = class Product {
 
   static deleteProductById(id, cb) {
     getProductsFromFile((products) => {
+      //delete Product Shop
       const filterdProduct = products.filter(prod => prod.id !== id) 
       fs.writeFile(p, JSON.stringify(filterdProduct), (err) => {
         console.log(err);
       });
+      //delete Product in Cart
+      const product = products.find(prod => prod.id === id)
+      Cart.deleteProduct(id, product.price)
       cb(filterdProduct)
     })
   }
