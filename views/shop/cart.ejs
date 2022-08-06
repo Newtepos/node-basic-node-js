@@ -6,8 +6,16 @@
         <main>
             <% if (cart.length > 0) { %> 
                 <% cart.map(({product, quantity}) => {%>
-                <li><%= product.title %> (<%= quantity %>)</li> 
+                <div>
+                    <p><%= product.title %> (<%= quantity %>)</p>
+                    <form action="/cart/delete" method="post">
+                        <input type="hidden" name="productId" id="productId" value="<%= product.id %>">
+                        <button class="btn" type="submit">Delete</button>
+                    </form>
+                </div> 
                 <% }) %>
+            <% } else { %>
+                <h1> No Product in Cart</h1>
             <% } %>
         </main>
         <%- include('../includes/end.ejs') %>
