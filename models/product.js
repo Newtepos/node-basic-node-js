@@ -9,13 +9,19 @@ module.exports = class Product {
     this.price = price;
   }
 
-  save() {}
+  save() {
+    return db.execute(
+      `INSERT INTO products (title, price, description, imageUrl) VALUES(?, ?, ?, ?)`,
+      [this.title, this.price, this.description, this.imageUrl]
+    );
+  }
 
   static fetchAll() {
     return db.execute("SELECT * FROM products");
   }
 
-  static findProductbyId(id) {}
+  static findProductbyId(id) {
+  }
 
   static deleteProductById(id) {}
 };
