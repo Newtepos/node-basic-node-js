@@ -17,13 +17,15 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;
-  Product.findProductbyId(productId, (product) => {
-    res.render("shop/product-detail", {
-      product,
-      pageTitle: product.pageTitle,
-      path: "/products",
-    });
-  });
+  Product.findProductbyId(productId)
+    .then(([product]) => {
+      res.render("shop/product-detail", {
+        product: product[0],
+        pageTitle: product.pageTitle,
+        path: "/products",
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getIndex = (req, res, next) => {
